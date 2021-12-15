@@ -2,21 +2,18 @@ version: '3.7'
 
 services:
   postgres:
-    image: postgres:12.5-alpine
+    image: postgres:13.5-alpine
     environment:
       POSTGRES_USER: 'gongbu'
       POSTGRES_PASSWORD: 'gongbu'
       POSTGRES_DB: 'gongbu'
     ports:
-      - "5432:5432"
+      - "5444:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - "./data/postgres:/var/lib/postgresql/data"
 
   frontend:
     build:
       context: ./frontend
     ports:
       - "5000:5000"
-
-volumes:
-  pgdata:

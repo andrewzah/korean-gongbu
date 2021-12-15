@@ -16,13 +16,13 @@ require 'pg'
 require 'json'
 
 begin
-  con = con = PG.connect({ :host => '0.0.0.0', :dbname => 'gongbu', :user => 'gongbu', :password => 'gongbu' })
+  con = PG.connect({ :host => '0.0.0.0', :port => 5444, :dbname => 'gongbu', :user => 'gongbu', :password => 'gongbu' })
 
-  #con.exec "DROP TABLE IF EXISTS examples"
-  #con.exec "CREATE TABLE examples (id SERIAL, english TEXT, korean TEXT, grammar_id INT)"
+  con.exec "DROP TABLE IF EXISTS grammars"
+  con.exec "CREATE TABLE grammars (id SERIAL, grammar_name TEXT, translation_en TEXT)"
 
   con.exec "DELETE FROM grammars where 1=1"
-  con.prepare('stm1', 'INSERT INTO grammars (name, meaning_en) VALUES ($1, $2)')
+  con.prepare('stm1', 'INSERT INTO grammars (grammar_name, translation_en) VALUES ($1, $2)')
 
   grammars = JSON.parse(File.read('../data/krgrammar.json'))
   grammars.each do |g|

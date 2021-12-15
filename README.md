@@ -24,4 +24,4 @@ A collection of korean learning tools!
 
 ### License
 
-Affero GPL v3.0 - [plaintext](./LICENSE)
+Affero GPL v3.0 - [[plaintext]](./LICENSE)
