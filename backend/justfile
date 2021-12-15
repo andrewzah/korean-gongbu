@@ -1,0 +1,8 @@
+build:
+  cargo +nightly build
+
+clippy:
+  cargo clippy
+
+fmt:
+  cargo +nightly fmt
