@@ -37,7 +37,7 @@ module Api
       end
 
       def grammar_params
-        params.require(:grammar).permit(:name, :category_en, :translation_en, :additional_info)
+        params.require(:grammar).permit(:name, :category_en, :description_en, :additional_info)
       end
     end
   end

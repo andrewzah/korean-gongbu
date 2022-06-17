@@ -28,7 +28,7 @@ begin
   #  additional_info TEXT)"
 
   con.exec "DELETE FROM grammars where 1=1"
-  con.prepare('stm1', 'INSERT INTO grammars (name, translation_en, category_en, additional_info, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)')
+  con.prepare('stm1', 'INSERT INTO grammars (name, description_en, category_en, additional_info, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)')
 
   timestamp = Time.now
 

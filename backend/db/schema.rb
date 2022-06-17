@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_17_052439) do
 
   create_table "grammars", force: :cascade do |t|
     t.text "name"
-    t.text "translation_en"
+    t.text "description_en"
     t.text "category_en"
     t.text "additional_info"
     t.datetime "created_at", null: false

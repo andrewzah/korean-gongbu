@@ -6,3 +6,6 @@ c:
 
 mi:
   ./bin/rails db:migrate
+
+db-reset:
+  RAILS_ENV=development RACK_ENV=development ./bin/rails db:drop db:create db:migrate
