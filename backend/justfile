@@ -3,3 +3,6 @@ s:
 
 c:
   ./bin/rails console
+
+mi:
+  ./bin/rails db:migrate
