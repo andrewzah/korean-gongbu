@@ -1,11 +1,5 @@
-build:
-  cargo +nightly build
+s:
+  ./bin/rails server
 
-clippy:
-  cargo clippy
-
-fmt:
-  cargo +nightly fmt
-
-run:
-  cargo +nightly run
+c:
+  ./bin/rails console
