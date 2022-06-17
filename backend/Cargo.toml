@@ -2,7 +2,7 @@
 name = "korean_gongbu"
 version = "0.1.0"
 authors = ["Andrew Zah <zah@andrewzah.com>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 diesel = { version = "1.4", features = ["postgres", "r2d2"] }
@@ -10,11 +10,11 @@ dotenv = "0.15"
 http = "0.2"
 lazy_static = "1.4"
 r2d2 = "0.8"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-thiserror = "1.0"
-tokio = { version = "1.0", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
-tracing-subscriber = "0.3"
 tracing-futures = "0.2"
+tracing-subscriber = "0.3"
 warp = "0.3"
