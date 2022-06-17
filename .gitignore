@@ -2,7 +2,7 @@
 /frontend/public
 /frontend/dist
 /frontend/korean_nums_wasm/pkg
-/.dockerdata/
+/data/postgres/
 
 .DS_Store
 /backend/.env

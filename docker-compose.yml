@@ -1,8 +1,8 @@
-version: '3.7'
+version: '3.8'
 
 services:
   postgres:
-    image: postgres:13.5-alpine
+    image: postgres:14.3-alpine
     environment:
       POSTGRES_USER: 'gongbu'
       POSTGRES_PASSWORD: 'gongbu'
@@ -17,3 +17,11 @@ services:
       context: ./frontend
     ports:
       - "5000:5000"
+
+  sonic:
+    image: valeriansaliou/sonic:v1.3.2
+    ports:
+      - "1492:1492"
+    volumes:
+      - "./sonic.cfg:/etc/sonic.cfg:ro"
+      - "./data/dev/sonic/store/:/var/lib/sonic/store/:ro"
