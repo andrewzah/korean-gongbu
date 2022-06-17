@@ -1,40 +1,58 @@
 <script>
-  import { Search } from 'sonic-channel';
+  import axios from 'axios';
 
-  let sonicChannelSearch = new Search({
-    host : "0.0.0.0",
-    port : 1492
-  }).connect({
-    connected : function() {
-      // Connected handler
-      console.info("Sonic Channel succeeded to connect to host (search).");
+  export default {
+    data() {
+      return {
+        query: '까',
+        results: []
+      }
     },
 
-    disconnected : function() {
-      // Disconnected handler
-      console.error("Sonic Channel is now disconnected (search).");
+    mounted() {
+      this.getResults()
     },
 
-    timeout : function() {
-      // Timeout handler
-      console.error("Sonic Channel connection timed out (search).");
+    watch: {
+      query(newQuery, oldQuery) {
+        this.getResults()
+      }
     },
 
-    retrying : function() {
-      // Retry handler
-      console.error("Trying to reconnect to Sonic Channel (search)...");
-    },
+    methods: {
+      async getResults() {
+        try {
+          const res = await axios.post(
+            'http://localhost:3000/api/v1/grammar/search',
+            { query: this.query }
+          );
 
-    error : function(error) {
-      // Failure handler
-      console.error("Sonic Channel failed to connect to host (search).", error);
+          this.results = res.data;
+        }
+        catch (err) {
+          this.results = [];
+        }
+      }
     }
-  });
+  }
 </script>
 
 <template>
+  <input type="text" v-model="query" placeholder="까" />
+
   <div class="about">
-    <h1>This is an about page</h1>
+    <div
+      v-for="grammar in results"
+      class="grammar"
+    >
+      <p><i>
+      {{ grammar.name }}
+      </i></p>
+      <p>
+      {{ grammar.translation_en }}
+      </p>
+      <br>
+    </div>
   </div>
 </template>
 
@@ -42,8 +60,10 @@
 @media (min-width: 1024px) {
   .about {
     min-height: 100vh;
-    display: flex;
-    align-items: center;
+  }
+
+  div p {
+    flex-direction: column;
   }
 }
 </style>
