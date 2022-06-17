@@ -9,7 +9,8 @@ Bundler.require(*Rails.groups)
 module Backend
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults(7.0)
+    # config.autoload_paths += %W( lib/ )
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -23,5 +24,10 @@ module Backend
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # config.middleware.use ActionDispatch::Cookies
+    # config.session_store :cookie_store, key: '_interslice_session'
+    # config.middleware.use config.session_store, config.session_options
+    # Rails.application.config.session_store :disabled
   end
 end

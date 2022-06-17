@@ -1,6 +1,7 @@
 module Api
   module V1
     class GrammarController < ApplicationController
+      before_action :authenticate_user!
       before_action :set_grammar, only: [:show, :update]
 
       def index

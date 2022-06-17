@@ -8,5 +8,7 @@ class CreateGrammars < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_index :grammars, :name
   end
 end
