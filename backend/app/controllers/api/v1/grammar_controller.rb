@@ -5,7 +5,8 @@ module Api
 
       def search
         @grammars = Grammar.search(params[:query], params[:page])
-        pp @grammars
+
+        render json: @grammars
       end
     end
   end
