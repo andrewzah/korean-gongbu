@@ -8,10 +8,27 @@ class ApplicationController < ActionController::API
 
   def authenticate_request
     header = request.headers["Authorization"]
-    header = header.split(" ").last if header
+    if header.nil?
+      render json: {
+        'errors': [
+          'Authorization header not found.'
+        ]
+      }, status: :bad_request
+      return
+    end
+    header = header.split(" ").last
 
-    decoded = jwt_decode(header)
-    @current_user = User.find(decoded[:user_id])
+    begin
+      decoded = jwt_decode(header)
+      @current_user = User.find(decoded[:user_id])
+    rescue => err
+      render json: {
+        'errors': [
+          "[#{err.class}] #{err.message}"
+        ]
+      }, status: :internal_server_error
+      return
+    end
   end
 
   #def authenticate_cookie

@@ -1,7 +1,7 @@
 module Api
   module V1
     class GrammarController < ApplicationController
-      before_action :authenticate_user!
+      before_action :authenticate_request
       before_action :set_grammar, only: [:show, :update]
 
       def index
@@ -9,11 +9,11 @@ module Api
         limit = params[:limit].nil? ? 100 : params[:limit]
 
         @grammars = Grammar.all.page(page).per(limit)
-        render json: @grammars
+        render json: GrammarSerializer.new(@grammars).serializable_hash
       end
 
       def show
-        render json: @grammar
+        render json: GrammarSerializer.new(@grammar).serializable_hash
       end
 
       def update
