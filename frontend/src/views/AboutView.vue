@@ -1,11 +1,15 @@
 <script>
   import axios from 'axios';
+  import { storeToRefs } from 'pinia';
+  import { useAuthStore } from '../stores/auth.ts';
+
+  const authStore = useAuthStore();
 
   export default {
     data() {
       return {
         query: '까',
-        results: []
+        results: [],
       }
     },
 
@@ -21,10 +25,15 @@
 
     methods: {
       async getResults() {
+        if (!authStore.token) {
+          console.log('no token!!');
+          return
+        }
         try {
           const res = await axios.post(
             'http://localhost:3000/api/v1/grammar/search',
-            { query: this.query }
+            { query: this.query },
+            { headers: { "Authorization": "Bearer "+authStore.token } }
           );
 
           this.results = res.data;
@@ -49,7 +58,7 @@
       {{ grammar.name }}
       </i></p>
       <p>
-      {{ grammar.translation_en }}
+      {{ grammar.description_en }}
       </p>
       <br>
     </div>
