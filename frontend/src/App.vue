@@ -1,26 +1,10 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from "vue-router";
-  import HelloWorld from "@/components/HelloWorld.vue";
-</script>
 
-<script lang="ts">
-  export default {
-    data() {
-      return {
-        authenticated: false,
-      }
-    },
+  import { storeToRefs } from 'pinia';
+  import { useAuthStore } from './stores/auth.ts';
 
-    methods: {
-      setAuthenticated(status) {
-        this.authenticated = status;
-      },
-
-      logout() {
-        this.authenticated = false;
-      }
-    }
-  }
+  const authStore = useAuthStore();
 </script>
 
 <template>
@@ -28,8 +12,8 @@
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink v-if="authenticated" v-on:click.native="logout()" replace to="/login">Logout</RouterLink>
+        <RouterLink to="/grammar-query">GrammarQuery</RouterLink>
+        <RouterLink v-if="authStore.token" v-on:click.native="authStore.logout()" replace to="/login">Logout</RouterLink>
         <RouterLink v-else="authenticated" to="/login">Login</RouterLink>
       </nav>
     </div>
@@ -47,5 +31,9 @@
   padding: 2rem;
 
   font-weight: normal;
+}
+
+nav a {
+  margin: 10px;
 }
 </style>

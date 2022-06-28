@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import axios from 'axios';
   import { storeToRefs } from 'pinia';
   import { useAuthStore } from '../stores/auth.ts';
@@ -55,7 +55,9 @@
       class="grammar"
     >
       <p><i>
-      {{ grammar.name }}
+        <router-link :to="{ name: 'grammar', params: { id: grammar.id }}" >
+          {{ grammar.name }}
+        </router-link>
       </i></p>
       <p>
       {{ grammar.description_en }}
