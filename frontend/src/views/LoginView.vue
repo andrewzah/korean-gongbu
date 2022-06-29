@@ -1,35 +1,17 @@
-<script>
-  import axios from 'axios';
-  import { useAuthStore } from '../stores/auth.ts';
+<script setup lang="ts">
+  import { ref, reactive, computed } from 'vue';
+  import { useAuthStore } from '../stores/auth';
+  import LoginRequest from '../models/requests/LoginRequest';
 
-  export default {
-    data() {
-      return {
-        input: {
-          email: '',
-          password: ''
-        }
-      }
-    },
+  const authStore = useAuthStore();
+  const loginRequest = new LoginRequest('', '');
 
-    computed: {
-      loggedIn() {
-        return this.$store.state.auth.status.loggedIn
-      }
-    },
-
-    mounted() { },
-    methods: {
-      async handleLogin() {
-        const authStore = useAuthStore();
-
-        try {
-          authStore.login(this.input.email, this.input.password);
-        }
-        catch (err) {
-          console.log(err);
-        }
-      }
+  const handleLogin = () => {
+    try {
+      authStore.login(loginRequest.email, loginRequest.raw_password);
+    }
+    catch (err) {
+      console.log(err);
     }
   }
 </script>
@@ -41,7 +23,7 @@
       <input
         type="text"
         name="email"
-        v-model="input.email"
+        v-model="loginRequest.email"
       />
     </div>
 
@@ -50,16 +32,12 @@
       <input
         type="text"
         name="password"
-        v-model="input.password"
+        v-model="loginRequest.raw_password"
       />
     </div>
 
     <div>
       <button><span>Submit</span></button>
-    </div>
-
-    <div class="form-group">
-      <div role="alert" v-if="message">{{message}}</div>
     </div>
   </form>
 </template>

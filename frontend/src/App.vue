@@ -1,8 +1,7 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from "vue-router";
 
-  import { storeToRefs } from 'pinia';
-  import { useAuthStore } from './stores/auth.ts';
+  import { useAuthStore } from './stores/auth';
 
   const authStore = useAuthStore();
 </script>
@@ -14,12 +13,14 @@
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/grammar-query">GrammarQuery</RouterLink>
         <RouterLink v-if="authStore.token" v-on:click.native="authStore.logout()" replace to="/login">Logout</RouterLink>
-        <RouterLink v-else="authenticated" to="/login">Login</RouterLink>
+        <RouterLink v-else to="/login">Login</RouterLink>
       </nav>
     </div>
   </header>
 
-  <RouterView />
+  <div id="app">
+    <RouterView />
+  </div>
 </template>
 
 <style>

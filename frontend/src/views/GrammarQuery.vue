@@ -1,49 +1,42 @@
-<script lang="ts">
+<script setup lang="ts">
   import axios from 'axios';
-  import { storeToRefs } from 'pinia';
-  import { useAuthStore } from '../stores/auth.ts';
+  import { onMounted, ref, watch } from 'vue';
+  import { useAuthStore } from '../stores/auth';
+  import type Grammar from '@/models/grammar';
 
   const authStore = useAuthStore();
+  const token: string = authStore.token || '';
+  const query = ref('');
+  const results = ref([]);
 
-  export default {
-    data() {
-      return {
-        query: '까',
-        results: [],
-      }
-    },
+  onMounted(() => {
+    getGrammars()
+  });
 
-    mounted() {
-      this.getResults()
-    },
+  async function getGrammars() {
+    if (!authStore.token) {
+      console.log('no token!!');
+      return
+    }
 
-    watch: {
-      query(newQuery, oldQuery) {
-        this.getResults()
-      }
-    },
+    try {
+      const res = await axios.post(
+        'http://localhost:3000/api/v1/grammar/search',
+        { query: query.value },
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
 
-    methods: {
-      async getResults() {
-        if (!authStore.token) {
-          console.log('no token!!');
-          return
-        }
-        try {
-          const res = await axios.post(
-            'http://localhost:3000/api/v1/grammar/search',
-            { query: this.query },
-            { headers: { "Authorization": "Bearer "+authStore.token } }
-          );
-
-          this.results = res.data;
-        }
-        catch (err) {
-          this.results = [];
-        }
-      }
+      results.value = res.data;
+    }
+    catch (err) {
+      console.log(err);
+      results.value = [];
     }
   }
+
+  watch(query, (_oldQuery: string, _newQuery: string) => {
+    getGrammars();
+  });
 </script>
 
 <template>

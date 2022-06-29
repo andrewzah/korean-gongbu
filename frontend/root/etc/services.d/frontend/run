@@ -1,0 +1,6 @@
+#!/command/with-contenv bash
+
+set 
+
+exec s6-setuidgid abc \
+  caddy /default/Caddyfile

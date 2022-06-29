@@ -1,7 +1,6 @@
-<script>
+<script lang="ts">
   import axios from 'axios';
-  import { storeToRefs } from 'pinia';
-  import { useAuthStore } from '../stores/auth.ts';
+  import { useAuthStore } from '../stores/auth';
 
   const authStore = useAuthStore();
 

@@ -1,70 +1,66 @@
-<script>
+<script setup lang="ts">
+  import { ref, onMounted, computed } from 'vue';
   import axios from 'axios';
-  import { storeToRefs } from 'pinia';
-  import { useAuthStore } from '../stores/auth.ts';
+  import type Grammar from '@/models/grammar';
+  import { useAuthStore } from '../stores/auth';
 
   const authStore = useAuthStore();
+  let token = authStore.token;
 
-  export default {
-    data() {
-      return {
-        err: null,
-        input: {
-          grammar: null,
-        }
-      }
-    },
+  // vars
+  let error = ref();
+  let grammar = ref();
+  let grammarId = computed(() => {
+    return 378
+  });
 
-    mounted() {
-      this.getResult()
-    },
+  async function getGrammar(id: number, token: string) {
+    try {
+      const result = await axios.get(
+        'http://localhost:3000/api/v1/grammar/' + grammarId.value,
+        { headers: { "Authorization": "Bearer " + authStore.token } }
+      );
 
-    methods: {
-      async getResult() {
-        if (!authStore.token) {
-          console.log('no token!!');
-          return;
-        }
-
-        try {
-          const res = await axios.get(
-            'http://localhost:3000/api/v1/grammar/' + this.$route.params.id,
-            { headers: { "Authorization": "Bearer "+authStore.token } }
-          );
-
-          this.input.grammar = res.data.data.attributes;
-        }
-        catch (err) {
-          this.err = err;
-        }
-      },
-
-      async handleEdit() {
-        if (!authStore.token) {
-          console.log('no token!!');
-          return;
-        }
-
-        try {
-          const res = await axios.put(
-            'http://localhost:3000/api/v1/grammar/' + this.$route.params.id,
-            { grammar: this.input.grammar, },
-            { headers: { "Authorization": "Bearer "+authStore.token } }
-          );
-
-          this.input.grammar = res.data.data.attributes;
-        }
-        catch (err) {
-          this.err = err;
-        }
-      }
+      grammar.value = result.data.data.attributes;
+    }
+    catch (err) {
+      console.log(err);
+      //error = err;
     }
   }
+
+  async function handleEdit() {
+    if (!authStore.token) {
+      console.log('no token!!');
+      return;
+    }
+
+    try {
+      const res = await axios.put(
+        'http://localhost:3000/api/v1/grammar/' + grammarId,
+        { grammar: grammar.value, },
+        { headers: { "Authorization": "Bearer "+authStore.token } }
+      );
+
+      grammar.value = res.data.data.attributes;
+    }
+    catch (err) {
+      // error = err;
+    }
+  }
+
+  onMounted(async () => {
+    try {
+      let grammar = await getGrammar(grammarId.value, token!);
+    } catch (err) {
+      console.log(err);
+    }
+  });
 </script>
 
 <template>
-  <form v-if="this.input.grammar" @submit.prevent="handleEdit">
-    <h1> {{ this.input.grammar.name }} </h1>
+  <form v-if="grammar" @submit.prevent="handleEdit">
+    <h1> {{ grammar.name }} </h1>
 
     <div>
       <label for="description_en">description_en</label>
@@ -72,7 +68,7 @@
       <input
         type="text"
         name="description_en"
-        v-model="input.grammar.description_en"
+        v-model="grammar.description_en"
       />
     </div>
 
@@ -84,7 +80,7 @@
       <input
         type="text"
         name="category_en"
-        v-model="input.grammar.category_en"
+        v-model="grammar.category_en"
       />
     </div>
     <br>
@@ -95,16 +91,12 @@
       <input
         type="text"
         name="additional_info"
-        v-model="input.grammar.additional_info"
+        v-model="grammar.additional_info"
       />
     </div>
 
     <div>
       <button><span>Save Changes</span></button>
-    </div>
-
-    <div class="form-group">
-      <div role="alert" v-if="message">{{message}}</div>
     </div>
   </form>
 </template>
